@@ -35,7 +35,7 @@ class City{
   
  getTemperature(){
   fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=${this.name}&APPID=3400000105dc079b5c25c9439613c410`
+      `https://api.openweathermap.org/data/2.5/weather?q=${this.name}&APPID=3400000105dc079b5c25c9439613c410`
     )
     .then(data =>data.json())
     .then(data =>{
@@ -68,7 +68,6 @@ let removeCity=function(e){
   console.log(index)
   listOfCities[index]=null;
  
-  console.log(listOfCities)
   updateId()
   saveStorage();
   }
