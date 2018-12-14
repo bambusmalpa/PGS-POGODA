@@ -90,6 +90,12 @@
 }
 .listItem__temperature {
   width: 40%;
+  transform-origin: center center;
+  animation:rotate 0.5s infinite steps(8);
+}
+.listItem__temperature--active{
+  width: 40%;
+  animation:none;
 }
 .listItem__delButton{
   width: 30%;
@@ -104,4 +110,14 @@
 .listItem__delButton--active {
   background-color: #fff;
   border: #751515 2px solid;
+}
+
+
+@keyframes rotate{
+  from{
+    transform: rotate(0deg)
+  }
+  to{
+    transform:rotate(360deg)
+  }
 }

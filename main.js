@@ -3,14 +3,14 @@ let list=document.querySelector(".list");
 let listOfCities=[];
 
 
-//define class
+
 class City{
   constructor(name){
     this.name=name;
     this.temperature;
   }
  
-  //create list element
+  
   createLi(){
     
     let createDivs=()=>{
@@ -43,12 +43,14 @@ class City{
         this.temperature=Math.trunc(data.main.temp-273);
         let place=document.querySelectorAll(".listItem__temperature");
         place[listOfCities.indexOf(this)].textContent=this.temperature;
+        place[listOfCities.indexOf(this)].classList.add("listItem__temperature--active");
         let button=document.querySelectorAll(".listItem__delButton");
         button[listOfCities.indexOf(this)].classList.add("listItem__delButton--active")})
 
 
     .catch(err=>{let place=document.querySelectorAll(".listItem__temperature");
-    place[listOfCities.indexOf(this)].textContent="Brak danych";})
+    place[listOfCities.indexOf(this)].textContent="Brak danych";
+    place[listOfCities.indexOf(this)].className="listItem__temperature--active";})
   }
   removeButton(){
     
@@ -61,16 +63,12 @@ class City{
 }
 
 let removeCity=function(e){
-  let index= listOfCities.indexOf(this);
-  // let index=list.children.dataset.index;
-  // let index=this.parentNode.dataset.index;
-  console.log(this.parentNode)
+  let index=e.target.parentNode.dataset.index;
   e.target.parentNode.remove();
-  let tempListOfCities=listOfCities;
-  listOfCities.splice(index,1);
-  listOfCities = listOfCities.filter(function(x){
-    return (x !== (undefined || null || ''));
-  });
+  console.log(index)
+  listOfCities[index]=null;
+ 
+  console.log(listOfCities)
   updateId()
   saveStorage();
   }
@@ -120,6 +118,7 @@ let inputCity=()=>{
 let saveStorage=()=>{
   localStorage.clear();
   localStorage.setItem("cities",JSON.stringify(listOfCities))
+ 
 }
 
 addButton.addEventListener("click", inputCity);
@@ -127,8 +126,12 @@ addButton.addEventListener("click", inputCity);
 
 
 let loadStorageCities=()=>{
+  
 let start=JSON.parse(localStorage.getItem("cities"));
 start.forEach(element => {
+  if(element==null){
+    return
+  }
   cerateCity(element.name)
 });}
 loadStorageCities();
