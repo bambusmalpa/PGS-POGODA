@@ -71,9 +71,14 @@ let removeCity=function(e){
   listOfCities = listOfCities.filter(function(x){
     return (x !== (undefined || null || ''));
   });
-  
- saveStorage();
+  updateId()
+  saveStorage();
   }
+
+let updateId=()=>{
+  list.childNodes.forEach((el,index)=>{
+    el.firstChild.textContent=index+1;
+  })}
 
 
 let checkRepete=function(name){
@@ -102,6 +107,7 @@ let cerateCity=(name)=>{
   newCity.createLi();
   newCity.getTemperature();
   newCity.removeButton();
+  updateId()
   saveStorage()
 }
 
