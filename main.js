@@ -14,7 +14,6 @@ let checkRepete=(cityName)=>{
     listOfCities.forEach(el=>{
       arrOfDatasets.push(el.dataset.cityName)
       })
-    
     if(arrOfDatasets.includes(cityName)){
       return true
     }
