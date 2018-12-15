@@ -1,136 +1,133 @@
 let addButton=document.querySelector(".browser__button")
 let list=document.querySelector(".list");
-let listOfCities=[];
+let delButton=document.querySelectorAll(".listItem__delButton");
 
-
-
-class City{
-  constructor(name){
-    this.name=name;
-    this.temperature;
-  }
- 
-  
-  createLi(){
-    
-    let createDivs=()=>{
-      
-      let listOfDivs=[];
-      for(let i=0;i<=3;i++){
-        let listOfClasses=["listItem__id","listItem__city","listItem__temperature","listItem__delButton"];
-        let txtContent=[listOfCities.indexOf(this)+1,this.name,`<i class="fas fa-spinner"></i>`,"USUŃ"];
-       listOfDivs[i]= document.createElement("div");
-       listOfDivs[i].classList.add(listOfClasses[i]);
-        listOfDivs[i].innerHTML=txtContent[i]
-       li.appendChild(listOfDivs[i]);
-      }}
-      let li=document.createElement("li");
-      li.classList.add("listItem");
-      li.setAttribute("data-index",listOfCities.indexOf(this))
+let inputCity=()=>{
+    let input=document.querySelector(".browser__input");
    
-    createDivs();
-    list.appendChild(li)
-  }
- 
-  
- getTemperature(){
-  fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${this.name}&APPID=3400000105dc079b5c25c9439613c410`
-    )
-    .then(data =>data.json())
-    .then(data =>{
-
-        this.temperature=Math.trunc(data.main.temp-273);
-        let place=document.querySelectorAll(".listItem__temperature");
-        place[listOfCities.indexOf(this)].textContent=this.temperature;
-        place[listOfCities.indexOf(this)].classList.add("listItem__temperature--active");
-        let button=document.querySelectorAll(".listItem__delButton");
-        button[listOfCities.indexOf(this)].classList.add("listItem__delButton--active")})
-
-
-    .catch(err=>{let place=document.querySelectorAll(".listItem__temperature");
-    place[listOfCities.indexOf(this)].textContent="Brak danych";
-    place[listOfCities.indexOf(this)].className="listItem__temperature--active";})
-  }
-  removeButton(){
-    
-    let delButtons=document.querySelectorAll(".listItem__delButton");
-    let index= listOfCities.indexOf(this);
-    delButtons[index].addEventListener("click",removeCity)
-  }
-
-
+    cerateCity(input.value.toLowerCase())
+    input.value=""
 }
 
-let removeCity=function(e){
-  let index=e.target.parentNode.dataset.index;
-  e.target.parentNode.remove();
-  console.log(index)
-  listOfCities[index]=null;
- 
-  updateId()
-  saveStorage();
-  }
+let checkRepete=(cityName)=>{
+    let listOfCities=list.querySelectorAll(".listItem");
+    let arrOfDatasets=[];
+    listOfCities.forEach(el=>{
+      arrOfDatasets.push(el.dataset.cityName)
+      
+    })
+    
+    if(arrOfDatasets.includes(cityName)){
+      return true
+    }
+    
+}
 
-let updateId=()=>{
-  list.childNodes.forEach((el,index)=>{
+let cerateCity=(cityName)=>{
+  if(cityName==""){
+    alert("podaj nazwę miasta")
+    return
+  }
+  if(checkRepete(cityName)){
+    alert("to miasto jest juz na liście")
+    return
+  }
+  
+
+  let createDivs=()=>{
+      let listOfDivs=[]; 
+      
+      for(let i=0;i<=3;i++){
+      let listOfClasses=["listItem__id","listItem__city","listItem__temperature","listItem__delButton"];
+      listOfDivs[i]= document.createElement("div");
+      listOfDivs[i].classList.add(listOfClasses[i]);
+      li.appendChild(listOfDivs[i]);
+    }
+      listOfDivs[2].innerHTML=`<i class="fas fa-spinner"></i>`;
+      listOfDivs[3].textContent="USUŃ"
+  }
+  let li=document.createElement("li");
+  li.classList.add("listItem");
+  
+  createDivs();
+  list.appendChild(li);
+
+  
+
+  let nameBox=li.querySelector(".listItem__city");
+  nameBox.textContent=cityName;
+  getTemperature(cityName);
+  let delButton=li.querySelector(".listItem__delButton");
+  delButton.addEventListener("click",removeLi)
+  cityName=cityName.split(" ").join("");
+  li.dataset.cityName=cityName;
+  updateLiPosition();
+  updateStorage();
+}
+let updateClasses=(city,temp)=>{
+   let target= list.querySelector(`[data-city-name=${city}]`);
+
+   target.children[2].textContent=`${temp}°C`
+   target.children[2].classList.add("listItem__temperature--active");
+    target.children[3].classList.add("listItem__delButton--active");
+}
+let showError=(city)=>{
+  let target= list.querySelector(`[data-city-name=${city}]`);
+  target.children[2].textContent="BRAK DANYCH";
+  target.children[2].classList.add("listItem__temperature--active");
+}
+
+let getTemperature=(city)=>{
+  fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=3400000105dc079b5c25c9439613c410`
+  )
+  .then(data =>data.json())
+  .then(data =>{
+
+      let temperature=Math.trunc(data.main.temp-273);
+      city=city.split(" ").join("");
+      updateClasses(city,temperature)
+    })
+.catch(err=>{
+  city=city.split(" ").join("");
+showError(city)})
+}
+
+let updateLiPosition=()=>{
+  let listOfElements=document.querySelectorAll(".listItem");
+  listOfElements.forEach((el,index)=>{
     el.firstChild.textContent=index+1;
   })}
 
-
-let checkRepete=function(name){
-    for(el of listOfCities){
-      if(el.name.toString()==name.toLowerCase()){
-        return true
-      }
-    }
-  }
-
-
-let cerateCity=(name)=>{
-  if(name===null||name===""){
-    alert("Podaj nazwę miasta");
-    return
-  }
-  
-  if(checkRepete(name)){
-    alert("To miasto jest na liście")
-    return
-  }
-  
- 
-  let newCity= new City(name)
-  listOfCities.push(newCity);
-  newCity.createLi();
-  newCity.getTemperature();
-  newCity.removeButton();
-  updateId()
-  saveStorage()
+let removeLi=(e)=>{
+  e.target.parentNode.remove();
+  updateLiPosition();
+  updateStorage();
 }
 
-let inputCity=()=>{
-  let input=document.querySelector(".browser__input");
-  cerateCity(input.value.toLowerCase())
-  input.value=""
-}
-
-let saveStorage=()=>{
+let updateStorage=()=>{
+  let listOfItems=list.querySelectorAll(".listItem");
+  let arrOfCities=[];
+  listOfItems.forEach(el=>{
+   arrOfCities.push(el.children[1].textContent)
+  })
   localStorage.clear();
-  localStorage.setItem("cities",JSON.stringify(listOfCities))
- 
+  localStorage.setItem("cities",JSON.stringify(arrOfCities))
 }
-
-addButton.addEventListener("click", inputCity);
-
-
-
-let loadStorageCities=()=>{
-  
-let start=JSON.parse(localStorage.getItem("cities"));
+let startingCities=()=>{
+  let start=JSON.parse(localStorage.getItem("cities"));
 start.forEach(element => {
   if(element==null){
     return
   }
-  cerateCity(element.name)
+  cerateCity(element)
 });}
-loadStorageCities();
+
+if(localStorage.length>0){
+startingCities();}
+
+
+
+
+
+addButton.addEventListener("click", inputCity);

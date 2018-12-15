@@ -70,25 +70,28 @@
 .label__temperature {
   width: 40%;
 }
+
 .list {
   display: flex;
   flex-direction: column;
+  list-style-position: inside;
 }
 
 .listItem {
+
   display: flex;
-  flex-direction: row;
   height: 60px;
   width: 100%;
-  justify-content: flex-start;
   align-items: center;
   border-bottom: 1px solid #333333;
 }
-.listItem__id {
+.listItem__id{
   width: 10%;
 }
+
 .listItem__city {
-  width: 20%;
+ 
+  width: 30%;
   text-transform: capitalize;
 }
 .listItem__temperature {
