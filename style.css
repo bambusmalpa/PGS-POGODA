@@ -39,6 +39,7 @@
   border: none;
   border-radius: 5px;
   text-align: center;
+  border:2px solid #333333;
 }
 .browser__button {
   width: 30%;
@@ -113,10 +114,30 @@
   justify-content: center;
   align-items: center;
   border-radius: 5px;
+  transition: 0.5s;
 }
 .listItem__delButton--active {
   background-color: #fff;
   border: #751515 2px solid;
+}
+
+@media (max-width:800px){
+  .container{
+    width: 100%;
+  }
+  .content{
+    margin-top: 50px;
+    width: 90%;
+    font-size: 90%;
+  }
+
+
+}
+
+@media (max-width:320px){
+  .content{
+    font-size: 80%;
+  }
 }
 
 
