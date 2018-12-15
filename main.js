@@ -75,11 +75,12 @@ let showError=(city)=>{
 
 let getTemperature=(city)=>{
   fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=3400000105dc079b5c25c9439613c410`
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}
+    &APPID=3400000105dc079b5c25c9439613c410`
   )
   .then(data =>data.json())
   .then(data =>{
-
+      console.log(data)
       let temperature=Math.trunc(data.main.temp-273);
       city=city.split(" ").join("");
       updateClasses(city,temperature)
