@@ -4,8 +4,7 @@ let delButton=document.querySelectorAll(".listItem__delButton");
 
 let inputCity=()=>{
     let input=document.querySelector(".browser__input");
-   
-    cerateCity(input.value.toLowerCase())
+   cerateCity(input.value.toLowerCase())
     input.value=""
 }
 
@@ -14,8 +13,7 @@ let checkRepete=(cityName)=>{
     let arrOfDatasets=[];
     listOfCities.forEach(el=>{
       arrOfDatasets.push(el.dataset.cityName)
-      
-    })
+      })
     
     if(arrOfDatasets.includes(cityName)){
       return true
@@ -32,9 +30,9 @@ let cerateCity=(cityName)=>{
     alert("to miasto jest juz na liście")
     return
   }
-  
 
-  let createDivs=()=>{
+  
+let createDivs=()=>{
       let listOfDivs=[]; 
       
       for(let i=0;i<=3;i++){
@@ -52,8 +50,6 @@ let cerateCity=(cityName)=>{
   createDivs();
   list.appendChild(li);
 
-  
-
   let nameBox=li.querySelector(".listItem__city");
   nameBox.textContent=cityName;
   getTemperature(cityName);
@@ -64,10 +60,11 @@ let cerateCity=(cityName)=>{
   updateLiPosition();
   updateStorage();
 }
+
+
 let updateClasses=(city,temp)=>{
    let target= list.querySelector(`[data-city-name=${city}]`);
-
-   target.children[2].textContent=`${temp}°C`
+    target.children[2].textContent=`${temp}°C`
    target.children[2].classList.add("listItem__temperature--active");
     target.children[3].classList.add("listItem__delButton--active");
 }
@@ -125,9 +122,5 @@ start.forEach(element => {
 
 if(localStorage.length>0){
 startingCities();}
-
-
-
-
 
 addButton.addEventListener("click", inputCity);
